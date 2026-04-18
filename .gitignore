@@ -1,0 +1,9 @@
+data/raw/
+models/
+__pycache__/
+.env
+assets/india_map.html
+models/*
+models/*.h5
+ml_env/
+tf_env/

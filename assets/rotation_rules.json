@@ -1,0 +1,306 @@
+{
+  "rice": {
+    "avoid_after": [
+      "rice",
+      "wheat"
+    ],
+    "prefer_after": [
+      "groundnut",
+      "blackgram",
+      "pigeonpea",
+      "soybean"
+    ],
+    "nitrogen_impact": -80,
+    "disease_family": "gramineae",
+    "seasons": [
+      "kharif"
+    ],
+    "rationale": "Rice is a heavy nitrogen consumer. Growing legumes before rice replenishes soil N and breaks pest cycles. Avoid rice-rice rotation as it depletes nutrients and builds up blast disease."
+  },
+  "wheat": {
+    "avoid_after": [
+      "wheat",
+      "barley"
+    ],
+    "prefer_after": [
+      "rice",
+      "maize",
+      "soybean",
+      "lentil",
+      "chickpea"
+    ],
+    "nitrogen_impact": -60,
+    "disease_family": "gramineae",
+    "seasons": [
+      "rabi"
+    ],
+    "rationale": "Wheat after legumes reduces N fertilizer requirement by 30-40 kg/ha. Wheat-wheat rotation builds up Karnal bunt and rust diseases. Rice-wheat is India's most common rotation."
+  },
+  "cotton": {
+    "avoid_after": [
+      "cotton",
+      "okra",
+      "tomato"
+    ],
+    "prefer_after": [
+      "wheat",
+      "sorghum",
+      "maize",
+      "groundnut"
+    ],
+    "nitrogen_impact": -100,
+    "disease_family": "malvaceae",
+    "seasons": [
+      "kharif"
+    ],
+    "rationale": "Cotton is Maharashtra's major Kharif crop but a heavy soil exhaustor. Continuous cotton causes Verticillium wilt buildup. Groundnut before cotton adds nitrogen and breaks disease cycle."
+  },
+  "soybean": {
+    "avoid_after": [
+      "soybean",
+      "groundnut",
+      "lentil"
+    ],
+    "prefer_after": [
+      "cotton",
+      "maize",
+      "sorghum",
+      "wheat"
+    ],
+    "nitrogen_impact": 80,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "kharif"
+    ],
+    "rationale": "Soybean fixes 80-120 kg N/ha from atmosphere — making it valuable before cereals. Avoid back-to-back legumes as they share root diseases. Soybean-wheat is a highly productive rotation in MP and Maharashtra."
+  },
+  "maize": {
+    "avoid_after": [
+      "maize",
+      "sorghum"
+    ],
+    "prefer_after": [
+      "soybean",
+      "groundnut",
+      "chickpea",
+      "lentil"
+    ],
+    "nitrogen_impact": -90,
+    "disease_family": "gramineae",
+    "seasons": [
+      "kharif",
+      "rabi",
+      "zaid"
+    ],
+    "rationale": "Maize is a high-yield but nutrient-intensive crop. After soybean, maize needs 30 kg less nitrogen fertilizer. Avoid maize after sorghum — they share stalk borer pests and grey leaf spot."
+  },
+  "groundnut": {
+    "avoid_after": [
+      "groundnut",
+      "soybean",
+      "blackgram"
+    ],
+    "prefer_after": [
+      "cotton",
+      "sorghum",
+      "maize",
+      "wheat"
+    ],
+    "nitrogen_impact": 50,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "kharif",
+      "rabi"
+    ],
+    "rationale": "Groundnut fixes 50-70 kg N/ha. After cereals, it improves soil structure and nitrogen. Back-to-back groundnut causes tikka leaf spot and collar rot buildup. Cotton-groundnut-cotton is a highly sustainable rotation."
+  },
+  "pigeonpea": {
+    "avoid_after": [
+      "pigeonpea",
+      "blackgram",
+      "soybean"
+    ],
+    "prefer_after": [
+      "cotton",
+      "maize",
+      "rice",
+      "sorghum"
+    ],
+    "nitrogen_impact": 120,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "kharif"
+    ],
+    "rationale": "Pigeonpea (Tur Dal) fixes 120 kg N/ha — the highest of all pulse crops. Roots reach 2m deep, breaking plough pan and improving soil structure. After pigeonpea, cereals and cotton show 20-30% yield increases."
+  },
+  "chickpea": {
+    "avoid_after": [
+      "chickpea",
+      "lentil",
+      "pea"
+    ],
+    "prefer_after": [
+      "rice",
+      "maize",
+      "cotton",
+      "sorghum"
+    ],
+    "nitrogen_impact": 100,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "rabi"
+    ],
+    "rationale": "Chickpea (Chana) is the classic Rabi legume after Kharif cereals. Fixes 80-100 kg N/ha. Avoid after lentil — shared Ascochyta blight pathogen. Rice-chickpea is a productive, sustainable rotation."
+  },
+  "blackgram": {
+    "avoid_after": [
+      "blackgram",
+      "pigeonpea",
+      "soybean"
+    ],
+    "prefer_after": [
+      "rice",
+      "maize",
+      "cotton",
+      "sorghum"
+    ],
+    "nitrogen_impact": 60,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "kharif",
+      "zaid"
+    ],
+    "rationale": "Blackgram (Urad) is a short-duration legume perfect for Zaid or as a break crop. Fixes 60 kg N/ha. Excellent for diversifying the rotation and improving soil health quickly."
+  },
+  "sugarcane": {
+    "avoid_after": [
+      "sugarcane"
+    ],
+    "prefer_after": [
+      "soybean",
+      "groundnut",
+      "wheat",
+      "maize"
+    ],
+    "nitrogen_impact": -120,
+    "disease_family": "gramineae",
+    "seasons": [
+      "kharif",
+      "annual"
+    ],
+    "rationale": "Sugarcane is a 10-12 month crop and the heaviest soil nutrient exhaustor. Ratoon (regrowth) crop possible for 2-3 years. After sugarcane, grow nitrogen-fixing legumes for at least one season to restore soil fertility."
+  },
+  "mustard": {
+    "avoid_after": [
+      "mustard",
+      "cabbage",
+      "cauliflower"
+    ],
+    "prefer_after": [
+      "rice",
+      "cotton",
+      "maize",
+      "groundnut"
+    ],
+    "nitrogen_impact": -40,
+    "disease_family": "brassicaceae",
+    "seasons": [
+      "rabi"
+    ],
+    "rationale": "Mustard is a valuable oilseed Rabi crop. Avoid continuous Brassica crops — they share Sclerotinia and Alternaria diseases. After Kharif cereals, mustard fits perfectly and has allelopathic weed suppression."
+  },
+  "lentil": {
+    "avoid_after": [
+      "lentil",
+      "chickpea",
+      "pea"
+    ],
+    "prefer_after": [
+      "rice",
+      "maize",
+      "cotton",
+      "wheat"
+    ],
+    "nitrogen_impact": 80,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "rabi"
+    ],
+    "rationale": "Lentil (Masoor) is a cool-season Rabi legume. Fixes 80 kg N/ha. Ideal after Kharif rice in eastern India (Bihar, West Bengal). Avoid after other legumes due to shared soil pathogens."
+  },
+  "mung bean": {
+    "avoid_after": [
+      "mung bean",
+      "blackgram",
+      "cowpea"
+    ],
+    "prefer_after": [
+      "wheat",
+      "rice",
+      "maize",
+      "cotton"
+    ],
+    "nitrogen_impact": 60,
+    "disease_family": "leguminosae",
+    "seasons": [
+      "kharif",
+      "zaid"
+    ],
+    "rationale": "Mung bean (Moong) is the fastest rotating legume — matures in 60-70 days. Perfect Zaid crop between Rabi and Kharif. Fixes 60 kg N/ha and its residue decomposes quickly, benefiting the next crop."
+  },
+  "jowar": {
+    "avoid_after": [
+      "jowar",
+      "maize"
+    ],
+    "prefer_after": [
+      "soybean",
+      "groundnut",
+      "lentil",
+      "blackgram"
+    ],
+    "nitrogen_impact": -70,
+    "disease_family": "gramineae",
+    "seasons": [
+      "kharif",
+      "rabi"
+    ],
+    "rationale": "Sorghum (Jowar) is drought-tolerant but competes with maize for soil resources. After legumes, yields improve by 15-20%. Jowar roots are very deep and improve soil structure for subsequent crops."
+  },
+  "bajra": {
+    "avoid_after": [
+      "bajra",
+      "jowar"
+    ],
+    "prefer_after": [
+      "groundnut",
+      "blackgram",
+      "mung bean"
+    ],
+    "nitrogen_impact": -60,
+    "disease_family": "gramineae",
+    "seasons": [
+      "kharif"
+    ],
+    "rationale": "Pearl millet (Bajra) is the primary Kharif cereal in arid Rajasthan. After legumes, downy mildew pressure decreases. Bajra-mustard is the classic rotation in Rajasthan and Haryana arid zones."
+  },
+  "sunflower": {
+    "avoid_after": [
+      "sunflower",
+      "safflower"
+    ],
+    "prefer_after": [
+      "chickpea",
+      "lentil",
+      "wheat",
+      "maize"
+    ],
+    "nitrogen_impact": -60,
+    "disease_family": "asteraceae",
+    "seasons": [
+      "rabi",
+      "kharif"
+    ],
+    "rationale": "Sunflower is a good catch crop. Avoid back-to-back planting — Sclerotinia head rot persists in soil 5+ years. After Rabi pulses, sunflower benefits from residual nitrogen and improved soil water retention."
+  }
+}
