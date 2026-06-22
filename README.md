@@ -10,23 +10,7 @@
 > and connects farmers to government schemes — all in one deployed web app.
 
 **[🚀 Live Demo](https://agrisense-india-gddbdagqt2cyllyjtmgvfw.streamlit.app/)** &nbsp;·&nbsp;
-**[📊 Kaggle Notebook](#)** &nbsp;·&nbsp;
 
-
----
-
-## 📸 Screenshots
-
-### Crop Advisor — AI recommendation with SHAP explanation
-![Crop Advisor](assets/screenshots/01_crop_advisor.png)
-
-### India Crop Map — Interactive choropleth
-![India Map](assets/screenshots/02_india_map.png)
-
-### Plant Disease Detector — CNN diagnosis with Grad-CAM
-![Disease Detector](assets/screenshots/03_disease_detector.png)
-
----
 
 ## 🎯 The Problem
 
