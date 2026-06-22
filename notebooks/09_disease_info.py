@@ -1,0 +1,560 @@
+"""
+AgriSense India — Disease Info JSON + Prediction Test (Day 12)
+File: notebooks/09_disease_info.py
+
+Builds disease_info.json — the knowledge base shown in the app
+after a disease is detected. Contains treatment and prevention info
+for all 38 PlantVillage disease classes.
+
+Also tests the trained model on 3 random test images.
+
+Run: python notebooks/09_disease_info.py
+"""
+
+import os
+import json
+import numpy as np
+import joblib
+import random
+import warnings
+warnings.filterwarnings("ignore")
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+os.makedirs("assets", exist_ok=True)
+
+print("=" * 60)
+print("AgriSense India — Disease Info + Prediction Test (Day 12)")
+print("=" * 60)
+
+
+# ════════════════════════════════════════════════════════════
+# PART 1 — BUILD disease_info.json
+# ════════════════════════════════════════════════════════════
+
+# This is the knowledge base that maps each PlantVillage class
+# to disease details and treatment recommendations.
+# Based on ICAR Plant Disease Management Guidelines + FAO resources.
+
+DISEASE_INFO = {
+    "Apple___Apple_scab": {
+        "disease_name": "Apple Scab",
+        "crop": "Apple",
+        "severity": "moderate",
+        "symptoms": "Olive-green to brown spots on leaves and fruit surface. Spots darken with age. Infected leaves may drop early.",
+        "cause": "Fungal — Venturia inaequalis. Spreads via rain splash in cool, wet spring conditions.",
+        "treatment_organic": "Neem oil spray (3ml/L water) every 7 days. Sulfur dust application. Remove and destroy infected leaves.",
+        "treatment_chemical": "Mancozeb 75 WP (2.5 g/L) or Captan 50 WP (2 g/L). Apply at bud break and repeat every 10 days.",
+        "prevention": "Plant resistant apple varieties. Prune for good air circulation. Avoid overhead irrigation. Collect fallen leaves.",
+        "source": "ICAR All India Coordinated Research Project on Fruits"
+    },
+    "Apple___Black_rot": {
+        "disease_name": "Black Rot",
+        "crop": "Apple",
+        "severity": "severe",
+        "symptoms": "Purple spots on leaves expanding to brown. Fruit shows circular lesions — rotting from core outward. Bark cankers.",
+        "cause": "Fungal — Botryosphaeria obtusa. Enters through wounds. Worst in warm, humid conditions.",
+        "treatment_organic": "Copper-based fungicide spray. Remove mummified fruits immediately. Prune dead wood.",
+        "treatment_chemical": "Captan 50 WP (2 g/L) or Thiophanate-methyl 70 WP (1 g/L). Begin at petal fall.",
+        "prevention": "Remove dead branches promptly. Avoid injuries to tree. Sanitize pruning tools.",
+        "source": "ICAR-CISH Lucknow"
+    },
+    "Apple___Cedar_apple_rust": {
+        "disease_name": "Cedar Apple Rust",
+        "crop": "Apple",
+        "severity": "moderate",
+        "symptoms": "Yellow-orange spots on upper leaf surface. Tube-like spore structures on leaf undersides.",
+        "cause": "Fungal — Gymnosporangium juniperi-virginianae. Requires both apple and cedar/juniper trees to complete life cycle.",
+        "treatment_organic": "Neem oil or sulfur sprays during infection periods. Remove nearby juniper trees if possible.",
+        "treatment_chemical": "Myclobutanil (Rally 40 WP) or Triadimefon. Apply from tight cluster through 3rd cover sprays.",
+        "prevention": "Plant rust-resistant apple cultivars. Remove juniper trees within 1 km radius.",
+        "source": "ICAR Annual Report on Integrated Disease Management"
+    },
+    "Apple___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Apple",
+        "severity": "none",
+        "symptoms": "No disease symptoms detected. Leaf appears green and healthy.",
+        "cause": "N/A",
+        "treatment_organic": "Continue regular monitoring. Maintain good soil health with organic matter.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Maintain adequate spacing, nutrition, and irrigation. Monitor regularly.",
+        "source": "PlantVillage Healthy Classification"
+    },
+    "Blueberry___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Blueberry",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Continue regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Maintain soil pH 4.5–5.5 for blueberries. Regular pruning.",
+        "source": "PlantVillage Dataset"
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+        "disease_name": "Powdery Mildew",
+        "crop": "Cherry",
+        "severity": "moderate",
+        "symptoms": "White powdery coating on leaves, young shoots, and fruit. Leaves curl and distort. Fruit may crack.",
+        "cause": "Fungal — Podosphaera clandestina. Favored by warm days, cool nights, and high humidity without rain.",
+        "treatment_organic": "Potassium bicarbonate spray (1 tsp/L). Dilute milk spray (40% milk + 60% water). Neem oil.",
+        "treatment_chemical": "Myclobutanil or Trifloxystrobin. Apply at first sign and repeat every 10–14 days.",
+        "prevention": "Avoid excessive nitrogen fertilization. Ensure good air circulation. Water at base, not leaves.",
+        "source": "ICAR-CISH Fruit Disease Management"
+    },
+    "Cherry_(including_sour)___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Cherry",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring only.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Annual pruning. Good drainage.",
+        "source": "PlantVillage Dataset"
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+        "disease_name": "Gray Leaf Spot",
+        "crop": "Maize",
+        "severity": "moderate",
+        "symptoms": "Long, narrow, tan-gray rectangular lesions parallel to leaf veins. Lesions may coalesce causing large blighted areas.",
+        "cause": "Fungal — Cercospora zeae-maydis. Spread by wind and rain. Worst in warm, humid conditions.",
+        "treatment_organic": "Remove crop debris. Increase plant spacing. Neem oil spray as preventive.",
+        "treatment_chemical": "Mancozeb 75 WP (2.5 g/L) or Azoxystrobin. Apply at first sign, repeat in 14 days.",
+        "prevention": "Plant resistant hybrids. Rotate with non-host crops (soybean, groundnut). Reduce crop residue.",
+        "source": "ICAR-IIMR Hyderabad"
+    },
+    "Corn_(maize)___Common_rust_": {
+        "disease_name": "Common Rust",
+        "crop": "Maize",
+        "severity": "moderate",
+        "symptoms": "Small, circular to elongated, brick-red pustules scattered over both leaf surfaces. Pustules turn dark brown with age.",
+        "cause": "Fungal — Puccinia sorghi. Wind-borne spores from distant sources.",
+        "treatment_organic": "Neem-based spray preventively. Remove heavily infected leaves.",
+        "treatment_chemical": "Mancozeb + Carbendazim combination. Apply at tassel emergence.",
+        "prevention": "Plant resistant varieties. Early planting to avoid peak infection periods.",
+        "source": "ICAR-IIMR (Indian Institute of Maize Research)"
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+        "disease_name": "Northern Leaf Blight",
+        "crop": "Maize",
+        "severity": "severe",
+        "symptoms": "Long (5–15 cm), cigar-shaped, tan lesions with wavy margins. Starts on lower leaves and progresses upward.",
+        "cause": "Fungal — Exserohilum turcicum. Spread by wind and rain splash. Favors cool, wet weather.",
+        "treatment_organic": "Remove infected leaves. Apply neem oil as protective spray before tasseling.",
+        "treatment_chemical": "Propiconazole 25 EC (1 ml/L) or Mancozeb (2.5 g/L). Apply at first sign.",
+        "prevention": "Use resistant hybrids. Crop rotation. Destroy infected debris after harvest.",
+        "source": "ICAR-IIMR Maize Disease Advisory"
+    },
+    "Corn_(maize)___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Maize",
+        "severity": "none",
+        "symptoms": "No disease detected. Leaves are green and vigorous.",
+        "cause": "N/A",
+        "treatment_organic": "Continue good agronomic practices.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Balanced NPK, proper spacing, timely irrigation.",
+        "source": "PlantVillage Dataset"
+    },
+    "Grape___Black_rot": {
+        "disease_name": "Black Rot",
+        "crop": "Grapes",
+        "severity": "severe",
+        "symptoms": "Brown circular spots with dark borders on leaves. Infected berries turn black and shrivel into hard mummies.",
+        "cause": "Fungal — Guignardia bidwellii. Spreads rapidly in warm, wet weather. Overwinters in mummified fruit.",
+        "treatment_organic": "Remove mummified berries immediately. Copper fungicide spray early season.",
+        "treatment_chemical": "Mancozeb or Myclobutanil. Begin applications at bud break every 10–14 days through veraison.",
+        "prevention": "Remove all mummified fruit before winter. Good canopy management for air circulation.",
+        "source": "ICAR-NRC for Grapes, Pune"
+    },
+    "Grape___Esca_(Black_Measles)": {
+        "disease_name": "Esca (Black Measles)",
+        "crop": "Grapes",
+        "severity": "severe",
+        "symptoms": "Tiger-stripe pattern of yellowing and browning between leaf veins. Berries develop dark spots and may shrivel.",
+        "cause": "Fungal complex — Phaeomoniella chlamydospora and others. Enters through pruning wounds.",
+        "treatment_organic": "Seal pruning wounds immediately with wound sealant. Remove severely affected wood.",
+        "treatment_chemical": "No reliable chemical cure. Preventive: paint pruning cuts with Trichoderma-based biocontrol.",
+        "prevention": "Make clean, smooth cuts. Seal all pruning wounds. Avoid pruning in wet weather.",
+        "source": "ICAR-NRC Grapes Viticulture Research"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+        "disease_name": "Leaf Blight",
+        "crop": "Grapes",
+        "severity": "moderate",
+        "symptoms": "Irregular brown to reddish-brown spots on older leaves. Spots may have yellow borders.",
+        "cause": "Fungal — Isariopsis clavispora. Spreads in humid conditions.",
+        "treatment_organic": "Copper hydroxide spray. Remove infected leaves. Improve air circulation.",
+        "treatment_chemical": "Captan or Mancozeb application at 15-day intervals.",
+        "prevention": "Train vines for good air flow. Avoid excessive irrigation on leaves.",
+        "source": "ICAR-NRC for Grapes"
+    },
+    "Grape___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Grapes",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Continue balanced nutrition and regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Annual pruning, balanced fertilization, good drainage.",
+        "source": "PlantVillage Dataset"
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+        "disease_name": "Citrus Greening (HLB)",
+        "crop": "Orange",
+        "severity": "severe",
+        "symptoms": "Asymmetric yellowing (blotchy mottle) of leaves. Small, misshapen, bitter fruit. Premature fruit drop. Trees slowly decline.",
+        "cause": "Bacterial — Candidatus Liberibacter asiaticus. Spread by Asian citrus psyllid insect vector.",
+        "treatment_organic": "No cure exists. Remove and destroy infected trees immediately to protect surrounding trees.",
+        "treatment_chemical": "Imidacloprid for psyllid control to prevent spread. No systemic treatment available.",
+        "prevention": "Use certified disease-free planting material. Control psyllid populations. Quarantine infected zones.",
+        "source": "ICAR-CCRI (Central Citrus Research Institute) Nagpur"
+    },
+    "Peach___Bacterial_spot": {
+        "disease_name": "Bacterial Spot",
+        "crop": "Peach",
+        "severity": "moderate",
+        "symptoms": "Small, water-soaked spots on leaves becoming angular, purple-brown. Leaves yellow and drop. Fruit shows sunken, dark lesions.",
+        "cause": "Bacterial — Xanthomonas arboricola pv. pruni. Spread by rain splash. Worse in warm, wet conditions.",
+        "treatment_organic": "Copper-based bactericide spray. Remove infected leaves. Avoid wetting foliage during irrigation.",
+        "treatment_chemical": "Oxytetracycline (Mycoshield) or copper hydroxide. Apply from pink bud stage.",
+        "prevention": "Plant resistant varieties. Avoid overhead irrigation. Maintain tree vigor through proper nutrition.",
+        "source": "ICAR Stone Fruit Research Station"
+    },
+    "Peach___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Peach",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring and balanced nutrition.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Proper pruning and sanitation.",
+        "source": "PlantVillage Dataset"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+        "disease_name": "Bacterial Spot",
+        "crop": "Bell Pepper",
+        "severity": "moderate",
+        "symptoms": "Water-soaked, raised spots on leaves, turning brown with yellow halo. Fruit shows raised, scabby lesions.",
+        "cause": "Bacterial — Xanthomonas campestris pv. vesicatoria. Spread by rain, wind, contaminated tools.",
+        "treatment_organic": "Copper hydroxide spray (3 g/L). Remove infected plant material. Avoid handling wet plants.",
+        "treatment_chemical": "Copper oxychloride 50 WP (3 g/L). Begin at transplanting and repeat weekly.",
+        "prevention": "Use certified disease-free seed. Avoid overhead irrigation. Rotate with non-solanaceous crops.",
+        "source": "ICAR-IIVR (Indian Institute of Vegetable Research)"
+    },
+    "Pepper,_bell___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Bell Pepper",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Good soil drainage, crop rotation.",
+        "source": "PlantVillage Dataset"
+    },
+    "Potato___Early_blight": {
+        "disease_name": "Early Blight",
+        "crop": "Potato",
+        "severity": "moderate",
+        "symptoms": "Dark brown-black spots with concentric rings (target-board pattern) on older leaves. Yellow halo around spots.",
+        "cause": "Fungal — Alternaria solani. Spread by wind and rain. Worsens with temperature fluctuations.",
+        "treatment_organic": "Neem oil spray (5 ml/L). Copper fungicide. Remove infected lower leaves.",
+        "treatment_chemical": "Mancozeb 75 WP (2.5 g/L) or Chlorothalonil. Apply at first sign, repeat every 7–10 days.",
+        "prevention": "Use certified disease-free seed tubers. Maintain plant nutrition. Adequate plant spacing.",
+        "source": "ICAR-CPRI (Central Potato Research Institute) Shimla"
+    },
+    "Potato___Late_blight": {
+        "disease_name": "Late Blight",
+        "crop": "Potato",
+        "severity": "severe",
+        "symptoms": "Water-soaked, pale green-brown lesions on leaves. White cottony growth on leaf undersides in humid conditions. Tubers rot.",
+        "cause": "Oomycete — Phytophthora infestans. Spreads explosively in cool, wet conditions. Caused Irish Famine 1845.",
+        "treatment_organic": "Remove infected plants immediately. Copper fungicide spray. Avoid overhead irrigation.",
+        "treatment_chemical": "Metalaxyl + Mancozeb (Ridomil Gold) — most effective. Apply preventively in high-risk periods.",
+        "prevention": "Plant resistant varieties. Avoid irrigating in the evening. Hilling to protect tubers from spores.",
+        "source": "ICAR-CPRI Shimla (Emergency Advisory)"
+    },
+    "Potato___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Potato",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Use certified seed potatoes, proper hilling.",
+        "source": "PlantVillage Dataset"
+    },
+    "Raspberry___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Raspberry",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Annual pruning, weed management.",
+        "source": "PlantVillage Dataset"
+    },
+    "Soybean___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Soybean",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Balanced fertilization, adequate spacing.",
+        "source": "ICAR-IISR Indore"
+    },
+    "Squash___Powdery_mildew": {
+        "disease_name": "Powdery Mildew",
+        "crop": "Squash",
+        "severity": "moderate",
+        "symptoms": "White powdery coating on leaf surface. Leaves turn yellow and die prematurely. Reduces yield significantly.",
+        "cause": "Fungal — Podosphaera xanthii. Favored by warm dry days and cool nights. Does not need water to spread.",
+        "treatment_organic": "Baking soda spray (1 tbsp/L + few drops dish soap). Dilute milk spray. Neem oil.",
+        "treatment_chemical": "Sulfur-based fungicide or Triadimefon. Apply at first sign every 7 days.",
+        "prevention": "Plant resistant varieties. Avoid excess nitrogen. Improve air circulation.",
+        "source": "ICAR-IIVR Varanasi"
+    },
+    "Strawberry___Leaf_scorch": {
+        "disease_name": "Leaf Scorch",
+        "crop": "Strawberry",
+        "severity": "moderate",
+        "symptoms": "Small, purple to reddish-brown spots on upper leaf surface. Centers turn light brown. Severely infected leaves have scorched appearance.",
+        "cause": "Fungal — Diplocarpon earlianum. Spreads by rain splash. Worse in wet, humid conditions.",
+        "treatment_organic": "Remove infected leaves. Copper-based fungicide spray. Good air circulation.",
+        "treatment_chemical": "Captan 50 WP or Myclobutanil. Apply before and after bloom.",
+        "prevention": "Avoid overhead irrigation. Remove old leaves after harvest. Plant in rows for good air flow.",
+        "source": "ICAR-NRCSS (National Research Centre for Strawberry)"
+    },
+    "Strawberry___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Strawberry",
+        "severity": "none",
+        "symptoms": "No disease detected.",
+        "cause": "N/A",
+        "treatment_organic": "Regular monitoring.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Replace runners every 3 years, good drainage.",
+        "source": "PlantVillage Dataset"
+    },
+    "Tomato___Bacterial_spot": {
+        "disease_name": "Bacterial Spot",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Small, water-soaked spots on leaves and fruit. Spots turn brown with yellow margins. Fruit shows raised, dark, scabby lesions.",
+        "cause": "Bacterial — Xanthomonas spp. Spread by rain splash and infected seed. Worse in warm, wet conditions.",
+        "treatment_organic": "Copper hydroxide spray (3 g/L). Remove infected leaves. Avoid wetting foliage.",
+        "treatment_chemical": "Copper oxychloride 50 WP (3 g/L) + Mancozeb combination. Apply weekly.",
+        "prevention": "Use certified disease-free seed. Drip irrigation instead of overhead. Crop rotation.",
+        "source": "ICAR-IIVR Varanasi"
+    },
+    "Tomato___Early_blight": {
+        "disease_name": "Early Blight",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Dark brown circular spots with concentric rings on older lower leaves. Yellow halo around lesions. Defoliation from bottom up.",
+        "cause": "Fungal — Alternaria solani. Spreads by wind and rain. Worsens with temperature stress.",
+        "treatment_organic": "Neem oil spray. Remove infected lower leaves. Apply Trichoderma-based biocontrol.",
+        "treatment_chemical": "Mancozeb 75 WP (2.5 g/L) or Chlorothalonil 75 WP. Apply every 7–10 days.",
+        "prevention": "Avoid planting in same field 2 years running. Remove crop debris after harvest. Mulching.",
+        "source": "ICAR-IIVR (Indian Institute of Vegetable Research)"
+    },
+    "Tomato___Late_blight": {
+        "disease_name": "Late Blight",
+        "crop": "Tomato",
+        "severity": "severe",
+        "symptoms": "Water-soaked lesions on leaves and stems turning dark brown. White mold on underside in humid weather. Fruit rots rapidly.",
+        "cause": "Oomycete — Phytophthora infestans. Same pathogen as potato late blight. Spreads very rapidly.",
+        "treatment_organic": "Copper-based spray preventively. Remove infected plants immediately to prevent spread.",
+        "treatment_chemical": "Metalaxyl + Mancozeb (Ridomil) — most effective. Apply at first sign every 7 days.",
+        "prevention": "Avoid overhead irrigation. Do not grow near potato fields. Use resistant varieties.",
+        "source": "ICAR-IIVR Emergency Disease Advisory"
+    },
+    "Tomato___Leaf_Mold": {
+        "disease_name": "Leaf Mold",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Pale greenish-yellow spots on upper leaf surface. Olive-green to grayish-brown mold on undersides.",
+        "cause": "Fungal — Passalora fulva. Favored by high humidity (>85%). Common in greenhouse tomatoes.",
+        "treatment_organic": "Improve ventilation. Reduce humidity. Copper-based spray.",
+        "treatment_chemical": "Mancozeb or Chlorothalonil. Apply every 7 days when conditions favor disease.",
+        "prevention": "Ensure good air circulation. Avoid overcrowding. Keep humidity below 85%.",
+        "source": "ICAR-IIVR Varanasi"
+    },
+    "Tomato___Septoria_leaf_spot": {
+        "disease_name": "Septoria Leaf Spot",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Small, circular spots with dark brown borders and lighter centers on lower leaves. Tiny black dots visible in centers.",
+        "cause": "Fungal — Septoria lycopersici. Spreads rapidly in warm, wet weather via rain splash.",
+        "treatment_organic": "Remove infected leaves immediately. Copper hydroxide spray. Mulch to reduce splash.",
+        "treatment_chemical": "Chlorothalonil 75 WP (2 g/L) or Mancozeb. Apply every 7–10 days.",
+        "prevention": "Crop rotation. Avoid overhead irrigation. Remove crop debris after harvest.",
+        "source": "ICAR-IIVR"
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+        "disease_name": "Spider Mites",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Fine stippling or bronzing of leaves. Fine webbing on underside. Leaves turn yellow and drop. Severe infestation causes defoliation.",
+        "cause": "Arachnid — Tetranychus urticae. Not a fungal disease. Thrives in hot, dry conditions. Rapid reproduction.",
+        "treatment_organic": "Neem oil spray (5 ml/L) every 5 days. Insecticidal soap spray. Water spray to dislodge mites.",
+        "treatment_chemical": "Abamectin 1.9 EC (0.5 ml/L) or Spiromesifen. Rotate chemicals to prevent resistance.",
+        "prevention": "Avoid over-application of nitrogen. Maintain adequate moisture. Introduce predatory mites.",
+        "source": "ICAR Integrated Pest Management Guidelines"
+    },
+    "Tomato___Target_Spot": {
+        "disease_name": "Target Spot",
+        "crop": "Tomato",
+        "severity": "moderate",
+        "symptoms": "Brown circular lesions with concentric rings (target pattern) on leaves, stems, and fruit. Fruit lesions become sunken.",
+        "cause": "Fungal — Corynespora cassiicola. Spread by wind and rain. Favored by warm, humid conditions.",
+        "treatment_organic": "Neem oil spray. Remove infected leaves. Improve air circulation.",
+        "treatment_chemical": "Azoxystrobin or Propiconazole. Apply at first detection every 10–14 days.",
+        "prevention": "Avoid dense planting. Crop rotation. Remove crop debris.",
+        "source": "ICAR-IIVR"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+        "disease_name": "Yellow Leaf Curl Virus",
+        "crop": "Tomato",
+        "severity": "severe",
+        "symptoms": "Yellowing and upward curling of leaves. Stunted plant growth. Flowers drop. Severely reduced yield.",
+        "cause": "Viral — TYLCV (Tomato Yellow Leaf Curl Virus). Transmitted by whitefly Bemisia tabaci. No cure once infected.",
+        "treatment_organic": "Remove and destroy infected plants immediately. Yellow sticky traps for whiteflies. Neem oil to control vector.",
+        "treatment_chemical": "Imidacloprid 17.8 SL (0.5 ml/L) for whitefly control. No antiviral treatment available.",
+        "prevention": "Plant resistant varieties. Use insect-proof netting. Remove infected plants promptly. Control whitefly population.",
+        "source": "ICAR-NHRDF (National Horticulture Research Development Foundation)"
+    },
+    "Tomato___Tomato_mosaic_virus": {
+        "disease_name": "Tomato Mosaic Virus",
+        "crop": "Tomato",
+        "severity": "severe",
+        "symptoms": "Mosaic pattern of light and dark green on leaves. Leaves may appear mottled, puckered, or shoe-string like.",
+        "cause": "Viral — ToMV (Tomato Mosaic Virus). Spreads by contact with infected plants, tools, hands. Very stable in soil.",
+        "treatment_organic": "Remove infected plants immediately. Wash hands and disinfect tools. Do not smoke near plants (tobacco carries TMV).",
+        "treatment_chemical": "No chemical treatment available. Prevention is the only approach.",
+        "prevention": "Use certified virus-free seed. Sanitize all tools. Avoid handling plants after tobacco use.",
+        "source": "ICAR-IIVR Varanasi"
+    },
+    "Tomato___healthy": {
+        "disease_name": "Healthy",
+        "crop": "Tomato",
+        "severity": "none",
+        "symptoms": "No disease detected. Plant appears vigorous and healthy.",
+        "cause": "N/A",
+        "treatment_organic": "Continue regular monitoring and balanced nutrition.",
+        "treatment_chemical": "No treatment needed.",
+        "prevention": "Crop rotation, balanced NPK, regular scouting.",
+        "source": "PlantVillage Dataset"
+    },
+}
+
+# Save disease_info.json
+out_path = "assets/disease_info.json"
+with open(out_path, "w", encoding="utf-8") as f:
+    json.dump(DISEASE_INFO, f, indent=2, ensure_ascii=False)
+
+print(f"\nSaved: {out_path}")
+print(f"Total disease entries: {len(DISEASE_INFO)}")
+print("\nSeverity distribution:")
+from collections import Counter
+sev_counts = Counter(v["severity"] for v in DISEASE_INFO.values())
+for sev, count in sorted(sev_counts.items()):
+    print(f"  {sev:10s}: {count}")
+
+print("\nCrops covered:")
+crops = sorted(set(v["crop"] for v in DISEASE_INFO.values()))
+for c in crops:
+    print(f"  {c}")
+
+
+# ════════════════════════════════════════════════════════════
+# PART 2 — PREDICTION TEST (if model exists)
+# ════════════════════════════════════════════════════════════
+model_path = "models/disease_model.h5"
+if not os.path.exists(model_path):
+    print(f"\nModel not found at {model_path}")
+    print("Run Day 11 script first: python notebooks/08_disease_cnn.py")
+    print("disease_info.json is complete regardless.")
+else:
+    print("\n" + "-" * 40)
+    print("Testing model on sample images...")
+
+    import tensorflow as tf
+    from tensorflow.keras.models import load_model
+    from tensorflow.keras.preprocessing import image as keras_image
+
+    model      = load_model(model_path)
+    class_names = joblib.load("models/class_names.pkl")
+
+    # Find test images
+    PV_TEST = None
+    for base in ["data/plantvillage/test", "data/raw/plantvillage/test"]:
+        if os.path.exists(base):
+            PV_TEST = base
+            break
+
+    if PV_TEST:
+        # Pick 3 random test images
+        all_imgs = []
+        for cls in os.listdir(PV_TEST):
+            cls_dir = os.path.join(PV_TEST, cls)
+            if os.path.isdir(cls_dir):
+                imgs = [os.path.join(cls_dir, f) for f in os.listdir(cls_dir)
+                        if f.endswith((".jpg",".jpeg",".png",".JPG",".JPEG"))]
+                for img in imgs[:2]:
+                    all_imgs.append((img, cls))
+
+        random.seed(42)
+        samples = random.sample(all_imgs, min(3, len(all_imgs)))
+
+        fig, axes = plt.subplots(1, len(samples), figsize=(5*len(samples), 5))
+        if len(samples) == 1:
+            axes = [axes]
+
+        for ax, (img_path, true_class) in zip(axes, samples):
+            img = keras_image.load_img(img_path, target_size=(224, 224))
+            arr = keras_image.img_to_array(img) / 255.0
+            arr = np.expand_dims(arr, axis=0)
+
+            preds     = model.predict(arr, verbose=0)[0]
+            top_idx   = np.argmax(preds)
+            pred_class = class_names[top_idx] if top_idx < len(class_names) else "unknown"
+            confidence = preds[top_idx] * 100
+
+            disease_key = pred_class
+            info = DISEASE_INFO.get(disease_key, {})
+            display_name = info.get("disease_name", pred_class.replace("_", " "))
+
+            ax.imshow(keras_image.load_img(img_path))
+            ax.set_title(
+                f"Predicted: {display_name}\nConfidence: {confidence:.1f}%\nTrue: {true_class.split('___')[-1].replace('_',' ')}",
+                fontsize=9, pad=5
+            )
+            ax.axis("off")
+
+            correct = "CORRECT" if pred_class == true_class else "WRONG"
+            print(f"  Image: {os.path.basename(img_path)}")
+            print(f"  True   : {true_class}")
+            print(f"  Pred   : {pred_class}  ({confidence:.1f}%) — {correct}")
+
+        plt.tight_layout()
+        plt.savefig("assets/cnn_sample_predictions.png", dpi=150, bbox_inches="tight")
+        plt.close()
+        print("  Saved: assets/cnn_sample_predictions.png")
+    else:
+        print("  Test folder not found — skipping prediction test")
+
+print("\n" + "=" * 60)
+print("Day 12 complete!")
+print(f"  disease_info.json : {'OK' if os.path.exists('assets/disease_info.json') else 'MISSING'}")
+print("Next: python notebooks/10_carbon_footprint.py")

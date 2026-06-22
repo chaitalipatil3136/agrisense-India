@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+venv/
+env/
+.venv/
+tf_env/
+ml_env/
+
+# Large model files
+models/disease_model.h5
+models/produce_grader.h5
+assets/india_map.html
+
+# Keep pkl files (they are small enough)
+# models/*.pkl — DO NOT ignore these
+
+# Database (user data — not code)
+agrisense.db
+*.db
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+*.ipynb
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data — raw datasets are too large for GitHub
+data/raw/plantvillage/
+data/raw/produce_quality/
+data/raw/fruit_vegetable_disease/
+
+# Keep processed data and CSVs
+# data/raw/crop_recommendation.csv — DO NOT ignore this
+
+# Streamlit secrets (never push API keys)
+.streamlit/secrets.toml
+
+# Logs
+*.log
+logs/

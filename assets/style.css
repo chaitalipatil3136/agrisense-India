@@ -1,0 +1,744 @@
+/* ═══════════════════════════════════════════════════════════
+   AgriSense India — Global UI Theme
+   File: assets/style.css
+
+   Aesthetic: Organic editorial — earthy greens, warm cream,
+   clean typography, generous whitespace, trustworthy layout.
+   Inspired by Japanese farming almanacs + modern dashboard clarity.
+*/
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+/* ── Design tokens ────────────────────────────────────────── */
+:root {
+    --green-900:  #0A2218;
+    --green-800:  #0F3320;
+    --green-700:  #145228;
+    --green-600:  #1D7A3A;
+    --green-500:  #1D9E75;   /* primary accent */
+    --green-400:  #5DCAA5;
+    --green-300:  #9FE1CB;
+    --green-100:  #E8F5EE;
+    --green-50:   #F0FBF6;
+
+    --amber-500:  #D97706;
+    --amber-400:  #EF9F27;
+    --amber-100:  #FEF3C7;
+    --amber-50:   #FFFBEB;
+
+    --red-500:    #DC2626;
+    --red-400:    #D85A30;
+    --red-100:    #FEE2E2;
+
+    --cream-100:  #FAFAF7;   /* page background */
+    --cream-200:  #F4F1EB;
+    --cream-300:  #EDE9DF;
+
+    --ink-900:    #1A1A14;
+    --ink-700:    #3D3D30;
+    --ink-500:    #6B6B55;
+    --ink-300:    #A8A890;
+    --ink-100:    #E8E8DC;
+
+    --white:      #FFFFFF;
+    --shadow-sm:  0 1px 3px rgba(10,34,24,0.08);
+    --shadow-md:  0 4px 16px rgba(10,34,24,0.10);
+    --shadow-lg:  0 8px 32px rgba(10,34,24,0.12);
+    --radius-sm:  6px;
+    --radius-md:  10px;
+    --radius-lg:  16px;
+    --radius-xl:  24px;
+}
+
+/* ── Base page ────────────────────────────────────────────── */
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: var(--cream-100) !important;
+    font-family: 'DM Sans', -apple-system, sans-serif !important;
+    color: var(--ink-700) !important;
+}
+
+[data-testid="stMain"] {
+    background-color: var(--cream-100) !important;
+}
+
+/* Main content block — tighter padding */
+.block-container {
+    padding: 2rem 2.5rem 3rem !important;
+    max-width: 1100px !important;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    background-color: var(--green-900) !important;
+    border-right: 1px solid var(--green-800) !important;
+}
+
+[data-testid="stSidebar"] * {
+    color: #C8E6D8 !important;
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    color: #FFFFFF !important;
+    font-family: 'DM Serif Display', Georgia, serif !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.01em !important;
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    color: #C8E6D8 !important;
+    font-size: 13px !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox label,
+[data-testid="stSidebar"] .stSlider label {
+    color: #9BBFA0 !important;
+    font-size: 12px !important;
+}
+
+[data-testid="stSidebar"] hr {
+    border-color: var(--green-800) !important;
+    margin: 12px 0 !important;
+}
+
+[data-testid="stSidebar"] a {
+    color: var(--green-400) !important;
+    text-decoration: none !important;
+}
+
+[data-testid="stSidebar"] a:hover {
+    color: var(--green-300) !important;
+    text-decoration: underline !important;
+}
+
+/* ── Top navigation bar ───────────────────────────────────── */
+[data-testid="stHeader"] {
+    background-color: var(--cream-100) !important;
+    border-bottom: 1px solid var(--ink-100) !important;
+}
+
+/* ── Typography ───────────────────────────────────────────── */
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif !important;
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+}
+
+h2 {
+    font-family: 'DM Serif Display', Georgia, serif !important;
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.01em !important;
+    margin-top: 28px !important;
+    margin-bottom: 4px !important;
+}
+
+h3 {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--ink-700) !important;
+    letter-spacing: 0.01em !important;
+    margin-top: 24px !important;
+    margin-bottom: 4px !important;
+}
+
+p, li, span, label {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    color: var(--ink-700) !important;
+    line-height: 1.65 !important;
+}
+
+.stCaption, [data-testid="stCaptionContainer"] p {
+    font-size: 11px !important;
+    color: var(--ink-300) !important;
+    line-height: 1.5 !important;
+}
+
+/* ── Horizontal divider ───────────────────────────────────── */
+hr {
+    border: none !important;
+    border-top: 1px solid var(--ink-100) !important;
+    margin: 24px 0 !important;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+/* Primary button */
+[data-testid="stButton"] button[kind="primary"] {
+    background-color: var(--green-500) !important;
+    color: var(--white) !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    padding: 12px 24px !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.15s ease !important;
+}
+
+[data-testid="stButton"] button[kind="primary"]:hover {
+    background-color: var(--green-600) !important;
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Secondary button */
+[data-testid="stButton"] button[kind="secondary"] {
+    background-color: var(--white) !important;
+    color: var(--green-500) !important;
+    border: 1.5px solid var(--green-500) !important;
+    border-radius: var(--radius-md) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease !important;
+}
+
+[data-testid="stButton"] button[kind="secondary"]:hover {
+    background-color: var(--green-50) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Input widgets ────────────────────────────────────────── */
+/* Selectbox */
+[data-testid="stSelectbox"] > div > div {
+    background-color: var(--white) !important;
+    border: 1.5px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    color: var(--ink-900) !important;
+    transition: border-color 0.15s ease !important;
+}
+
+[data-testid="stSelectbox"] > div > div:hover {
+    border-color: var(--green-500) !important;
+}
+
+/* Number input */
+[data-testid="stNumberInput"] input {
+    background-color: var(--white) !important;
+    border: 1.5px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    color: var(--ink-900) !important;
+}
+
+[data-testid="stNumberInput"] input:focus {
+    border-color: var(--green-500) !important;
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.12) !important;
+    outline: none !important;
+}
+
+/* Text input */
+[data-testid="stTextInput"] input {
+    background-color: var(--white) !important;
+    border: 1.5px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+}
+
+[data-testid="stTextInput"] input:focus {
+    border-color: var(--green-500) !important;
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.12) !important;
+    outline: none !important;
+}
+
+/* Slider */
+[data-testid="stSlider"] > div > div > div > div {
+    background-color: var(--green-500) !important;
+}
+
+[data-testid="stSlider"] > div > div > div > div > div {
+    background-color: var(--green-500) !important;
+    border: 2px solid var(--white) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Slider track */
+[data-testid="stSlider"] [data-testid="stTickBar"] {
+    background-color: var(--ink-100) !important;
+}
+
+/* Radio buttons */
+[data-testid="stRadio"] label {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px !important;
+    color: var(--ink-700) !important;
+}
+
+/* Checkbox */
+[data-testid="stCheckbox"] label {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px !important;
+    color: var(--ink-700) !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    background-color: var(--white) !important;
+    border: 1.5px dashed var(--green-400) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 8px !important;
+    transition: border-color 0.15s ease !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: var(--green-500) !important;
+    background-color: var(--green-50) !important;
+}
+
+/* ── Widget labels ────────────────────────────────────────── */
+[data-testid="stWidgetLabel"] p,
+.stSlider label p,
+.stSelectbox label p,
+.stNumberInput label p,
+.stRadio label p {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--ink-500) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    margin-bottom: 4px !important;
+}
+
+/* ── Metric cards ─────────────────────────────────────────── */
+[data-testid="stMetric"] {
+    background-color: var(--white) !important;
+    border: 1px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 14px 16px !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+[data-testid="stMetricLabel"] p {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    color: var(--ink-300) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.07em !important;
+}
+
+[data-testid="stMetricValue"] {
+    font-family: 'DM Serif Display', Georgia, serif !important;
+    font-size: 26px !important;
+    color: var(--ink-900) !important;
+    line-height: 1.2 !important;
+}
+
+[data-testid="stMetricDelta"] {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+/* ── Alert boxes ──────────────────────────────────────────── */
+/* Success */
+[data-testid="stSuccess"] {
+    background-color: var(--green-50) !important;
+    border: 1px solid var(--green-300) !important;
+    border-left: 4px solid var(--green-500) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 10px 14px !important;
+}
+
+[data-testid="stSuccess"] p {
+    color: var(--green-800) !important;
+    font-size: 13px !important;
+}
+
+/* Info */
+[data-testid="stInfo"] {
+    background-color: #F0F7FF !important;
+    border: 1px solid #BAD7F5 !important;
+    border-left: 4px solid #2563EB !important;
+    border-radius: var(--radius-md) !important;
+    padding: 10px 14px !important;
+}
+
+[data-testid="stInfo"] p {
+    color: #1E3A5F !important;
+    font-size: 13px !important;
+}
+
+/* Warning */
+[data-testid="stWarning"] {
+    background-color: var(--amber-50) !important;
+    border: 1px solid #FDE68A !important;
+    border-left: 4px solid var(--amber-400) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 10px 14px !important;
+}
+
+[data-testid="stWarning"] p {
+    color: #7C2D12 !important;
+    font-size: 13px !important;
+}
+
+/* Error */
+[data-testid="stError"] {
+    background-color: var(--red-100) !important;
+    border: 1px solid #FECACA !important;
+    border-left: 4px solid var(--red-500) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 10px 14px !important;
+}
+
+[data-testid="stError"] p {
+    color: #7F1D1D !important;
+    font-size: 13px !important;
+}
+
+/* ── Expander ─────────────────────────────────────────────── */
+[data-testid="stExpander"] {
+    background-color: var(--white) !important;
+    border: 1px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm) !important;
+    margin-bottom: 8px !important;
+}
+
+[data-testid="stExpander"] summary {
+    padding: 12px 16px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: var(--ink-900) !important;
+}
+
+[data-testid="stExpander"] summary:hover {
+    background-color: var(--green-50) !important;
+}
+
+[data-testid="stExpander"] > div > div {
+    padding: 0 16px 14px !important;
+}
+
+/* ── Tabs ─────────────────────────────────────────────────── */
+[data-testid="stTabs"] [data-testid="stTab"] {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--ink-500) !important;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    padding: 8px 16px !important;
+    transition: color 0.15s ease !important;
+}
+
+[data-testid="stTabs"] [aria-selected="true"] {
+    color: var(--green-600) !important;
+    border-bottom: 2px solid var(--green-500) !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stTabContent"] {
+    padding: 16px 0 !important;
+}
+
+/* ── Dataframe / Table ────────────────────────────────────── */
+[data-testid="stDataFrame"] {
+    border: 1px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    overflow: hidden !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Spinner ──────────────────────────────────────────────── */
+[data-testid="stSpinner"] {
+    color: var(--green-500) !important;
+}
+
+/* ── Image ────────────────────────────────────────────────── */
+[data-testid="stImage"] img {
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Plotly charts ────────────────────────────────────────── */
+[data-testid="stPlotlyChart"] {
+    border: 1px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    overflow: hidden !important;
+    box-shadow: var(--shadow-sm) !important;
+    background-color: var(--white) !important;
+}
+
+/* ── Matplotlib charts ────────────────────────────────────── */
+[data-testid="stPyplotGlobalUse"] {
+    border: 1px solid var(--ink-100) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Markdown ─────────────────────────────────────────────── */
+.stMarkdown p {
+    color: var(--ink-700) !important;
+    font-size: 14px !important;
+    line-height: 1.7 !important;
+}
+
+.stMarkdown h1 {
+    font-family: 'DM Serif Display', Georgia, serif !important;
+}
+
+.stMarkdown h2 {
+    font-family: 'DM Serif Display', Georgia, serif !important;
+}
+
+.stMarkdown strong {
+    color: var(--ink-900) !important;
+    font-weight: 600 !important;
+}
+
+.stMarkdown code {
+    background-color: var(--cream-200) !important;
+    border: 1px solid var(--ink-100) !important;
+    border-radius: 4px !important;
+    padding: 1px 5px !important;
+    font-size: 12px !important;
+    color: var(--green-700) !important;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+}
+
+.stMarkdown pre {
+    background-color: var(--ink-900) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 14px 16px !important;
+}
+
+.stMarkdown pre code {
+    background: none !important;
+    border: none !important;
+    color: #C8F0DF !important;
+    font-size: 12px !important;
+}
+
+/* Markdown table */
+.stMarkdown table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-sm) !important;
+    overflow: hidden !important;
+}
+
+.stMarkdown th {
+    background-color: var(--green-900) !important;
+    color: var(--green-100) !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    padding: 8px 12px !important;
+    border: none !important;
+    text-align: left !important;
+}
+
+.stMarkdown td {
+    padding: 8px 12px !important;
+    border-bottom: 1px solid var(--ink-100) !important;
+    color: var(--ink-700) !important;
+}
+
+.stMarkdown tr:nth-child(even) td {
+    background-color: var(--cream-100) !important;
+}
+
+.stMarkdown tr:hover td {
+    background-color: var(--green-50) !important;
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+[data-testid="stProgressBar"] > div > div {
+    background-color: var(--green-500) !important;
+    border-radius: 99px !important;
+}
+
+/* ── Columns gap ──────────────────────────────────────────── */
+[data-testid="stHorizontalBlock"] {
+    gap: 16px !important;
+}
+
+/* ── Remove Streamlit default branding ────────────────────── */
+#MainMenu { visibility: hidden !important; }
+footer    { visibility: hidden !important; }
+
+/* Keep deploy button visible */
+[data-testid="stToolbar"] { visibility: visible !important; }
+
+/* ── Custom component classes ─────────────────────────────── */
+
+/* Section header — use instead of st.markdown("### ...") */
+.agri-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 10px;
+    padding-left: 14px;
+    border-left: 3px solid var(--green-500);
+}
+
+.agri-section-icon { font-size: 20px; }
+
+.agri-section-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink-900);
+    margin: 0;
+}
+
+.agri-section-sub {
+    font-size: 11px;
+    color: var(--ink-300);
+    margin: 0;
+}
+
+/* Stat card — white card with a left colour strip */
+.agri-stat {
+    background: var(--white);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.agri-stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-300);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin: 0 0 2px;
+}
+
+.agri-stat-value {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 24px;
+    color: var(--ink-900);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.agri-stat-sub {
+    font-size: 11px;
+    color: var(--ink-300);
+    margin: 2px 0 0;
+}
+
+/* Hero banner — gradient card for page top */
+.agri-hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    border-radius: var(--radius-xl);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.agri-hero::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+}
+
+.agri-hero h1 {
+    color: var(--white) !important;
+    font-family: 'DM Serif Display', Georgia, serif !important;
+    font-size: 28px !important;
+    margin: 0 0 6px !important;
+}
+
+.agri-hero p {
+    color: #C8F0DF !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    max-width: 600px;
+}
+
+/* Result card — dark card for primary prediction result */
+.agri-result {
+    background: linear-gradient(135deg, #0A1628 0%, #0F2D1E 100%);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    border-left: 5px solid var(--green-500);
+    margin: 12px 0;
+}
+
+/* Badge — pill-shaped label */
+.agri-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
+.agri-badge-green  { background: var(--green-500); color: var(--white); }
+.agri-badge-amber  { background: var(--amber-400); color: var(--white); }
+.agri-badge-red    { background: var(--red-400);   color: var(--white); }
+.agri-badge-teal   { background: var(--green-400); color: var(--white); }
+.agri-badge-outline {
+    background: transparent;
+    border: 1.5px solid var(--green-500);
+    color: var(--green-600);
+}
+
+/* Info strip — horizontal info band */
+.agri-strip {
+    background: var(--green-50);
+    border: 1px solid var(--green-300);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--green-800);
+    margin: 8px 0;
+}
+
+/* Scheme card */
+.agri-scheme {
+    background: var(--white);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s ease;
+}
+
+.agri-scheme:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* Pest risk card */
+.agri-pest-high   { border-left: 4px solid var(--red-400);   }
+.agri-pest-medium { border-left: 4px solid var(--amber-400); }
+.agri-pest-low    { border-left: 4px solid var(--green-500); }
+
+/* Source citation */
+.agri-source {
+    font-size: 10px;
+    color: var(--ink-300);
+    border-top: 1px solid var(--ink-100);
+    padding-top: 8px;
+    margin-top: 16px;
+}

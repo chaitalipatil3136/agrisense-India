@@ -1,0 +1,70 @@
+{
+  "cotton": [
+    {
+      "pest_name": "Whitefly",
+      "risk_months": [7, 8, 9],
+      "risk_level": "high",
+      "trigger_conditions": {
+        "min_temp": 28,
+        "max_temp": 40,
+        "min_rainfall_mm": 50
+      },
+      "symptoms": "Yellowing leaves, sticky honeydew",
+      "prevention": "Use resistant varieties, avoid excess nitrogen",
+      "chemical_control": "Imidacloprid spray",
+      "organic_control": "Neem oil spray",
+      "source": "ICAR Cotton Guidelines"
+    },
+    {
+      "pest_name": "Bollworm",
+      "risk_months": [8, 9, 10],
+      "risk_level": "high",
+      "trigger_conditions": {
+        "min_temp": 25,
+        "max_temp": 35,
+        "min_rainfall_mm": 40
+      },
+      "symptoms": "Damaged bolls, larvae inside",
+      "prevention": "Pheromone traps",
+      "chemical_control": "Spinosad",
+      "organic_control": "Bt spray",
+      "source": "ICAR"
+    }
+  ],
+
+  "soybean": [
+    {
+      "pest_name": "Girdle Beetle",
+      "risk_months": [7, 8],
+      "risk_level": "medium",
+      "trigger_conditions": {
+        "min_temp": 25,
+        "max_temp": 35,
+        "min_rainfall_mm": 30
+      },
+      "symptoms": "Stem cutting",
+      "prevention": "Timely sowing",
+      "chemical_control": "Chlorpyrifos",
+      "organic_control": "Neem extract",
+      "source": "ICAR"
+    }
+  ],
+
+  "rice": [
+    {
+      "pest_name": "Brown Planthopper",
+      "risk_months": [7, 8, 9],
+      "risk_level": "high",
+      "trigger_conditions": {
+        "min_temp": 25,
+        "max_temp": 35,
+        "min_rainfall_mm": 60
+      },
+      "symptoms": "Hopper burn",
+      "prevention": "Avoid dense planting",
+      "chemical_control": "Buprofezin",
+      "organic_control": "Light traps",
+      "source": "ICAR"
+    }
+  ]
+}
