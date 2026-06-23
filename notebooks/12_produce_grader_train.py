@@ -1,6 +1,3 @@
-
-Copy
-
 """
 AgriSense India — Produce Quality Grader Training
 File: notebooks/12_produce_grader_train.py

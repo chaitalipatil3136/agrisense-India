@@ -15,6 +15,7 @@ import streamlit as st
 import numpy as np
 import os
 import sys
+from huggingface_hub import hf_hub_download
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
  
 st.set_page_config(
@@ -72,35 +73,25 @@ IMG_SIZE = 224
 # ── Model loading ─────────────────────────────────────────────
 @st.cache_resource
 def load_grader_model():
-    """
-    Try to load produce_grader.h5 (EfficientNetB0).
-    Falls back to disease_model.h5 wrapper if not available.
-    """
-    grader_path  = "models/produce_grader.h5"
-    disease_path = "models/disease_model.h5"
- 
+
     try:
         import tensorflow as tf
- 
-        if os.path.exists(grader_path):
-            model = tf.keras.models.load_model(grader_path)
-            return model, "efficientnet", None
- 
-        elif os.path.exists(disease_path):
-            model = tf.keras.models.load_model(disease_path)
-            return model, "disease_wrapper", None
- 
-        else:
-            return None, None, (
-                "No model found. Run `python notebooks/12_produce_grader_train.py` "
-                "to train the grader, or ensure disease_model.h5 exists."
-            )
- 
+
+        grader_path = hf_hub_download(
+            repo_id="chaitalipatil3136/agrisense_india",
+            filename="produce_grader.h5",
+            token=st.secrets["HF_TOKEN"]
+        )
+
+        model = tf.keras.models.load_model(grader_path)
+
+        return model, "efficientnet", None
+
     except ImportError:
         return None, None, "TensorFlow not installed. Run: pip install tensorflow-cpu"
+
     except Exception as e:
         return None, None, f"Model load error: {e}"
- 
  
 def predict_grade(model, model_type: str, img_array: np.ndarray) -> dict:
     """

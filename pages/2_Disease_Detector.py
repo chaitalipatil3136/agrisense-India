@@ -10,6 +10,7 @@ import numpy as np
 import json
 import os
 import sys
+from huggingface_hub import hf_hub_download
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -55,9 +56,17 @@ except Exception:
 def load_disease_model():
     if not TF_AVAILABLE:
         return None
+
     try:
-        model = load_model("models/disease_model.h5")
+        model_path = hf_hub_download(
+            repo_id="chaitalipatil3136/agrisense_india",
+            filename="disease_model.h5",
+            token=st.secrets["HF_TOKEN"]
+        )
+
+        model = load_model(model_path)
         return model
+
     except Exception as e:
         st.error(f"Model load failed: {e}")
         return None

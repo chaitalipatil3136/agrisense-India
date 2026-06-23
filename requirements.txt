@@ -16,3 +16,4 @@ prophet>=1.1.5
 fpdf2>=2.7.0
 reportlab>=4.0.0
 folium>=0.14.0
+huggingface_hub
